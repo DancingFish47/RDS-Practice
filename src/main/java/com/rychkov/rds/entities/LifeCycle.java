@@ -14,6 +14,7 @@ import javax.persistence.Table;
 public class LifeCycle extends AbstractEntity {
     @Column(name = "name")
     private String name;
+
     @Column(name = "level")
     private Integer level;
 }

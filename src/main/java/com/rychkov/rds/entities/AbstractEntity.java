@@ -14,9 +14,11 @@ public class AbstractEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Integer id;
+
     @Version
     @Column(name = "version")
     private Integer version;
+
     @Column(name = "created_date")
     @CreationTimestamp
     private Date date;

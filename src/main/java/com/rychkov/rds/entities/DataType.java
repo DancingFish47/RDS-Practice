@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @Data
 @Entity
 @Table(name = "datatype")
-public class DataType extends AbstractEntity{
+public class DataType extends AbstractEntity {
     @Column(name = "name")
     private String name;
 }
