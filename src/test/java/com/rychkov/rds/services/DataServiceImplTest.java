@@ -29,12 +29,12 @@ class DataServiceImplTest {
 
     @Test
     void getAllDataTypes() {
-        assertNotNull(dataService.getAllDataTypes());
+        assertFalse(dataService.getAllDataTypes().isEmpty());
     }
 
     @Test
     void getAllLifeCycles() {
-        assertNotNull(dataService.getAllLifeCycles());
+        assertFalse(dataService.getAllLifeCycles().isEmpty());
     }
 
     @Test
@@ -63,6 +63,6 @@ class DataServiceImplTest {
         assertTrue(optionalDataType.isPresent());
         dataService.saveNewDataObject(DataObjectDto.builder().dataContent("Test").dataType(optionalDataType.get().getId()).lifeCycle(1).build());
         Page<DataObject> dataObjectPage = dataService.getPageDataObjectsByDataTypeName(optionalDataType.get().getName(), 1);
-        assertTrue(dataObjectPage.getTotalPages()>0);
+        assertTrue(dataObjectPage.getTotalPages() > 0);
     }
 }

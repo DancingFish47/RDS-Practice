@@ -10,15 +10,15 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface DataService {
-    Iterable<DataType> getAllDataTypes();
+    List<DataType> getAllDataTypes();
 
-    Iterable<LifeCycle> getAllLifeCycles();
+    List<LifeCycle> getAllLifeCycles();
 
     Long countLifeCycles();
 
     DataObject saveNewDataObject(DataObjectDto dataObjectDto) throws DataObjectException;
 
-    Iterable<DataObject> getAllDataObjectsByDataTypeName(String dataTypeName);
+    List<DataObject> getAllDataObjectsByDataTypeName(String dataTypeName);
 
     Page<DataObject> getPageDataObjectsByDataTypeName(String dataTypeName, Integer page);
 }

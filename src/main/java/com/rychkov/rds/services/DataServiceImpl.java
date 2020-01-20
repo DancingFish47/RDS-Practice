@@ -29,13 +29,13 @@ public class DataServiceImpl implements DataService {
     private final LifeCyclesRepository lifeCyclesRepository;
 
     @Override
-    public Iterable<DataType> getAllDataTypes() {
-        return dataTypesRepository.findAll();
+    public List<DataType> getAllDataTypes() {
+        return (List<DataType>) dataTypesRepository.findAll();
     }
 
     @Override
-    public Iterable<LifeCycle> getAllLifeCycles() {
-        return lifeCyclesRepository.findAll();
+    public List<LifeCycle> getAllLifeCycles() {
+        return (List<LifeCycle>) lifeCyclesRepository.findAll();
     }
 
     @Override
@@ -65,7 +65,7 @@ public class DataServiceImpl implements DataService {
     }
 
     @Override
-    public Iterable<DataObject> getAllDataObjectsByDataTypeName(String dataTypeName) throws DataObjectException {
+    public List<DataObject> getAllDataObjectsByDataTypeName(String dataTypeName) throws DataObjectException {
         Optional<DataType> optionalDataType = dataTypesRepository.findByName(dataTypeName);
         if (optionalDataType.isEmpty()) throw new DataObjectException("Wrong data type!");
         return dataObjectsRepository.findAllByDataType_Id(optionalDataType.get().getId());
