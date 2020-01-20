@@ -1,7 +1,3 @@
-async function showData(){
-  alert(document.getElementById("dataTypeSelectOutput").value);
-}
-
 async function submitData(){
     let dataObject = {
        editedBy: document.getElementById("name").value,

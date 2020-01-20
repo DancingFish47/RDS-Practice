@@ -1,5 +1,6 @@
 package com.rychkov.rds.controllers;
 
+import com.rychkov.rds.dtos.DataObjectDto;
 import com.rychkov.rds.dtos.ResponseDto;
 import com.rychkov.rds.entities.DataObject;
 import com.rychkov.rds.services.DataService;
@@ -15,24 +16,23 @@ import java.util.List;
 public class MainPageController {
     private final DataService dataService;
 
-    @GetMapping("/")
-    public String mainPage(Model model) {
+    @GetMapping({"/", "/{dataTypeName}"})
+    public String mainPage(@PathVariable(required = false) String dataTypeName,
+                           Model model) {
+        if (dataTypeName!=null) {
+            model.addAttribute("dataObjects", dataService.getAllDataObjectsByDataType(dataTypeName));
+        }
         model.addAttribute("dataTypes", dataService.getAllDataTypes());
         model.addAttribute("lifeCycles", dataService.getAllLifeCycles());
         model.addAttribute("lifeCyclesCount", dataService.countLifeCycles());
         return "index";
     }
 
-    @RequestMapping(value = "/getDataObjects", method = RequestMethod.POST)
-    @ResponseBody
-    public List<DataObject> getDataObjects(@RequestBody Integer dataTypeId, Integer page) {
-        return dataService.getDataObjects(dataTypeId, page);
-    }
 
     @RequestMapping(value = "/saveNewDataObject", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDto saveNewDataObject(@RequestBody DataObject dataObject) {
-        dataService.saveNewDataObject(dataObject);
+    public ResponseDto saveNewDataObject(@RequestBody DataObjectDto dataObjectDto) {
+        dataService.saveNewDataObject(dataObjectDto);
         return ResponseDto.builder().error(false).build();
     }
 }

@@ -12,11 +12,11 @@ import java.util.List;
 public interface DataService {
     Iterable<DataType> getAllDataTypes();
 
-    List<DataObject> getDataObjects(Integer dataTypeId, Integer page);
-
     Iterable<LifeCycle> getAllLifeCycles();
 
     Long countLifeCycles();
 
-    void saveNewDataObject(DataObjectDto dataObjectDto) throws DataObjectException;
+    DataObject saveNewDataObject(DataObjectDto dataObjectDto) throws DataObjectException;
+
+    Iterable<DataObject> getAllDataObjectsByDataType(String dataTypeName);
 }

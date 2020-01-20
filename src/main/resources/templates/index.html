@@ -10,11 +10,36 @@
       <div id="outputDiv" style="border-right: 2px; width:50%; margin-right: auto; float: left">
          <h3>Output</h3>
          <label for="dataTypeSelectOutput">Data Type</label>
-         <select id="dataTypeSelectOutput" onchange="showData()">
+         <select id="dataTypeSelectOutput" onchange="location = this.options[this.selectedIndex].text">
             <option disabled selected value="">Select data type</option>
             <option th:each="type : ${dataTypes}" th:text="${type.name}"
-               th:value="${type.id}"></option>
+               th:value="${type.id}" th:href="${'/' + type.name}"></option>
          </select>
+        <br>
+         <div th:if="${!#lists.isEmpty(dataObjects)}" id="dataObjectsDiv" style="display: block;">
+           <table id="dataObjectsTable">
+               <thead>
+               <tr>
+                   <th scope="col">Edited by</th>
+                   <th scope="col">Data Type</th>
+                   <th scope="col">Data Content</th>
+                   <th scope="col">Current life cycle</th>
+                   <th scope="col">Max life cycle level</th>
+                   <th scope="col">Valid till</th>
+               </tr>
+               </thead>
+               <tbody>
+               <tr th:each="dataObject : ${dataObjects}">
+                   <td th:text="${dataObject.editedBy}"></td>
+                   <td th:text="${dataObject.dataType.name}"></td>
+                   <td th:text="${dataObject.dataContent}"></td>
+                   <td th:text="${dataObject.lifeCycle.name + ' - ' + dataObject.lifeCycle.level}"></td>
+                   <td th:text="${dataObject.maxLifeCycleLevel}"></td>
+                   <td th:text="${dataObject.validTill}"></td>
+               </tr>
+               </tbody>
+           </table>
+       </div>
       </div>
       <div id="inputDiv" style="border-left: 2px; width:50%; margin-left: auto; float: right">
          <h3>Input/Edit</h3>

@@ -26,16 +26,10 @@ public class DataServiceImpl implements DataService {
     private final DataTypesRepository dataTypesRepository;
     private final DataObjectsRepository dataObjectsRepository;
     private final LifeCyclesRepository lifeCyclesRepository;
-    private final Environment env;
 
     @Override
     public Iterable<DataType> getAllDataTypes() {
         return dataTypesRepository.findAll();
-    }
-
-    @Override
-    public List<DataObject> getDataObjects(Integer dataTypeId, Integer page) {
-        return dataObjectsRepository.findAllByDataType_Id(dataTypeId);
     }
 
     @Override
@@ -48,10 +42,7 @@ public class DataServiceImpl implements DataService {
         return lifeCyclesRepository.count();
     }
 
-    @Override
-    public void saveNewDataObject(DataObject dataObject) throws DataObjectException {
-        if(dataObjectsRepository.save(dataObject) == null) throw new DataObjectException("Saving has failed!");
-    public void saveNewDataObject(DataObjectDto dataObjectDto) throws DataObjectException {
+    public DataObject saveNewDataObject(DataObjectDto dataObjectDto) throws DataObjectException {
         Optional<DataType> optionalDataType = dataTypesRepository.findById(dataObjectDto.getDataType());
         if (optionalDataType.isEmpty()) throw new DataObjectException("Wrong data type!");
         Optional<LifeCycle> optionalLifeCycle = lifeCyclesRepository.findById(dataObjectDto.getLifeCycle());
@@ -65,7 +56,17 @@ public class DataServiceImpl implements DataService {
                 .validTill(dataObjectDto.getValidTill())
                 .build();
 
-        if (dataObjectsRepository.save(dataObject) == null)
+        dataObject = dataObjectsRepository.save(dataObject);
+        if (dataObject == null)
             throw new DataObjectException("Failed to save new data object");
+
+        return dataObject;
+    }
+
+    @Override
+    public Iterable<DataObject> getAllDataObjectsByDataType(String dataTypeName) throws DataObjectException {
+        Optional<DataType> optionalDataType = dataTypesRepository.findByName(dataTypeName);
+        if (optionalDataType.isEmpty()) throw new DataObjectException("Wrong data type!");
+        return dataObjectsRepository.findAllByDataType_Id(optionalDataType.get().getId());
     }
 }
