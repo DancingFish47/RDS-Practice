@@ -1,12 +1,16 @@
 package com.rychkov.rds.entities;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.sql.Date;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
+@Builder
 @Table(name = "dataobject")
 public class DataObject extends AbstractEntity {
     @ManyToOne(fetch = FetchType.LAZY)
