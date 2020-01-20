@@ -18,5 +18,7 @@ public interface DataService {
 
     DataObject saveNewDataObject(DataObjectDto dataObjectDto) throws DataObjectException;
 
-    Iterable<DataObject> getAllDataObjectsByDataType(String dataTypeName);
+    Iterable<DataObject> getAllDataObjectsByDataTypeName(String dataTypeName);
+
+    Page<DataObject> getPageDataObjectsByDataTypeName(String dataTypeName, Integer page);
 }

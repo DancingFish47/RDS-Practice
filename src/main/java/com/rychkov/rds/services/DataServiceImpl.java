@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -64,9 +65,16 @@ public class DataServiceImpl implements DataService {
     }
 
     @Override
-    public Iterable<DataObject> getAllDataObjectsByDataType(String dataTypeName) throws DataObjectException {
+    public Iterable<DataObject> getAllDataObjectsByDataTypeName(String dataTypeName) throws DataObjectException {
         Optional<DataType> optionalDataType = dataTypesRepository.findByName(dataTypeName);
         if (optionalDataType.isEmpty()) throw new DataObjectException("Wrong data type!");
         return dataObjectsRepository.findAllByDataType_Id(optionalDataType.get().getId());
+    }
+
+    @Override
+    public Page<DataObject> getPageDataObjectsByDataTypeName(String dataTypeName, Integer page) {
+        Optional<DataType> optionalDataType = dataTypesRepository.findByName(dataTypeName);
+        if (optionalDataType.isEmpty()) throw new DataObjectException("Wrong data type!");
+        return dataObjectsRepository.findAllByDataType_Name(dataTypeName, PageRequest.of(page-1, 2));
     }
 }

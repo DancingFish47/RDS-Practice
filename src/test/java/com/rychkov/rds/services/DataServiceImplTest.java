@@ -5,14 +5,12 @@ import com.rychkov.rds.entities.DataObject;
 import com.rychkov.rds.entities.DataType;
 import com.rychkov.rds.repositories.DataObjectsRepository;
 import com.rychkov.rds.repositories.DataTypesRepository;
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.Optional;
 
@@ -56,6 +54,15 @@ class DataServiceImplTest {
         Optional<DataType> optionalDataType = dataTypesRepository.findByName("Web");
         assertTrue(optionalDataType.isPresent());
         dataService.saveNewDataObject(DataObjectDto.builder().dataContent("Test").dataType(optionalDataType.get().getId()).lifeCycle(1).build());
-        assertNotNull(dataService.getAllDataObjectsByDataType(optionalDataType.get().getName()));
+        assertNotNull(dataService.getAllDataObjectsByDataTypeName(optionalDataType.get().getName()));
+    }
+
+    @Test
+    void getPageDataObjectsByDataTypeName() {
+        Optional<DataType> optionalDataType = dataTypesRepository.findByName("Web");
+        assertTrue(optionalDataType.isPresent());
+        dataService.saveNewDataObject(DataObjectDto.builder().dataContent("Test").dataType(optionalDataType.get().getId()).lifeCycle(1).build());
+        Page<DataObject> dataObjectPage = dataService.getPageDataObjectsByDataTypeName(optionalDataType.get().getName(), 1);
+        assertTrue(dataObjectPage.getTotalPages()>0);
     }
 }

@@ -5,11 +5,10 @@ import com.rychkov.rds.dtos.ResponseDto;
 import com.rychkov.rds.entities.DataObject;
 import com.rychkov.rds.services.DataService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -18,9 +17,22 @@ public class MainPageController {
 
     @GetMapping({"/", "/{dataTypeName}"})
     public String mainPage(@PathVariable(required = false) String dataTypeName,
+                           @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
                            Model model) {
-        if (dataTypeName!=null) {
-            model.addAttribute("dataObjects", dataService.getAllDataObjectsByDataType(dataTypeName));
+        if (dataTypeName != null) {
+            Page<DataObject> dataObjectPage = dataService.getPageDataObjectsByDataTypeName(dataTypeName, page);
+
+            int maxPage = dataObjectPage.getTotalPages();
+            int nextPage = 0;
+            int prevPage = 0;
+
+            if (page + 1 <= maxPage) nextPage = page + 1;
+            if (page - 1 > 0) prevPage = page - 1;
+
+            model.addAttribute("page", page);
+            model.addAttribute("nextPage", nextPage);
+            model.addAttribute("prevPage", prevPage);
+            model.addAttribute("dataObjects", dataObjectPage);
         }
         model.addAttribute("dataTypes", dataService.getAllDataTypes());
         model.addAttribute("lifeCycles", dataService.getAllLifeCycles());
