@@ -42,3 +42,8 @@ public class MainPageController {
         return ResponseDto.builder().error(false).build();
     }
 }
+/* TODO 1) YML PROPS
+        2) VALIDATION?
+        3) EDITING
+        4) EXCEPTION HANDLING
+ */

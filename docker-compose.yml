@@ -6,6 +6,27 @@ networks:
     driver: bridge
 
 services:
+  rds-practice:
+    image: dancingfish/rds-practice:rds-practice
+    container_name: rds-practice
+    restart: always
+    ports:
+      - 8080:8080
+    expose:
+      - 8080
+    depends_on:
+      - db
+      - test-db
+      - flyway
+    environment:
+      spring.datasource.driver-class-name: com.mysql.jdbc.Driver
+      spring.datasource.url: jdbc:mysql://db:3306/rdsdb
+      spring.datasource.username: root
+      spring.datasource.password: 123
+    networks:
+      - net
+      - test-net
+
   db:
     image: mysql
     environment:
@@ -53,6 +74,29 @@ services:
     environment:
       PMA_HOST: test-db
       PMA_PORT: 3306
+
+  flyway:
+    container_name: flyway
+    image: flyway/flyway
+    command: -url=jdbc:mysql://db -schemas=rdsdb -user=root -password=123 -connectRetries=60 migrate
+    volumes:
+      - ./schema.sql:/flyway/sql/V1__Initial.sql
+    depends_on:
+      - db
+    networks:
+      - net
+
+  flyway-test:
+    container_name: flyway-test
+    image: flyway/flyway
+    command: -url=jdbc:mysql://test-db -schemas=test-rdsdb -user=root -password=123 -connectRetries=60 migrate
+    volumes:
+      - ./schema-test.sql:/flyway/sql/V1__Initial.sql
+    depends_on:
+      - test-db
+    networks:
+      - test-net
+
 volumes:
   db-data:
   test-db-data:
