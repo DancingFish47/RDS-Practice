@@ -72,7 +72,7 @@ public class DataServiceImpl implements DataService {
     public Page<DataObject> getPageDataObjects(@Nullable String dataTypeName, @Nullable Date date, Integer page) {
         if (dataTypeName != null) {
             if (date != null) {
-                return dataObjectsRepository.findAllByDataType_NameAndValidTill(
+                return dataObjectsRepository.findAllByDataType_NameAndValidTillGreaterThanOrderByValidTillAsc(
                         dataTypeName,
                         date,
                         PageRequest.of(page - 1, Integer.parseInt(Objects.requireNonNull(environment.getProperty("dataObjects.by.page")))));
@@ -83,7 +83,7 @@ public class DataServiceImpl implements DataService {
             }
         } else {
             if (date != null) {
-                return dataObjectsRepository.findAllByValidTill(
+                return dataObjectsRepository.findAllByValidTillGreaterThanOrderByValidTillAsc(
                         date,
                         PageRequest.of(page - 1, Integer.parseInt(Objects.requireNonNull(environment.getProperty("dataObjects.by.page")))));
             } else {

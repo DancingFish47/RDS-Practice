@@ -14,7 +14,7 @@
          <h3>Output</h3>
          <label for="dataTypeSelectOutput">Data Type</label>
          <select id="dataTypeSelectOutput">
-            <option disabled selected value=null>Select data type</option>
+            <option selected value=null>All</option>
             <option th:each="type : ${dataTypes}" th:text="${type.name}"
                th:value="${type.id}" th:href="${'/' + type.name}"></option>
          </select>

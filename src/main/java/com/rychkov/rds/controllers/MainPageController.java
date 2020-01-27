@@ -6,6 +6,7 @@ import com.rychkov.rds.entities.DataObject;
 import com.rychkov.rds.services.DataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class MainPageController {
 
     @GetMapping({"/"})
     public String mainPage(@RequestParam(value = "dataType", required = false) String dataTypeName,
-                           @RequestParam(value = "date", required = false) Date date,
+                           @RequestParam(value = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date,
                            @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
                            Model model) {
 
@@ -44,5 +45,4 @@ public class MainPageController {
         return ResponseDto.builder().error(false).build();
     }
 }
-/* TODO 1) YML PROPS
- */
+

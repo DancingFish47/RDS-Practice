@@ -29,5 +29,14 @@ async function findData(){
   let dataTypeName = dataTypeSelect.options[dataTypeSelect.selectedIndex].text;
   let date = document.getElementById("dateOutput").value;
   if(dataTypeSelect.options[dataTypeSelect.selectedIndex].value == "null") dataTypeName = null;
-  alert(dataTypeName + " " + date);
+
+  var url = new URL(window.location);
+// If your expected result is "http://foo.bar/?x=1&y=2&x=42"
+  if(date !== null) url.searchParams.set('date', date);
+  else url.searchParams.delete('date');
+  if(dataTypeName !== null) url.searchParams.set('dataType', dataTypeName);
+  else url.searchParams.delete('dataType');
+  url.searchParams.set('page', 1);
+
+  window.location.replace(url);
 }

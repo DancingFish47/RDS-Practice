@@ -15,7 +15,8 @@ public interface DataObjectsRepository extends PagingAndSortingRepository<DataOb
 
     Page<DataObject> findAllByDataType_Name(String dataTypeName, Pageable pageable);
 
-    Page<DataObject> findAllByValidTill(Date date, Pageable pageable);
+    Page<DataObject> findAllByValidTillGreaterThanOrderByValidTillAsc(Date date, Pageable pageable);
 
-    Page<DataObject> findAllByDataType_NameAndValidTill(String dataTypeName, Date date, Pageable pageable);
+    Page<DataObject> findAllByDataType_NameAndValidTillGreaterThanOrderByValidTillAsc(String dataTypeName, Date date, Pageable pageable);
+
 }
