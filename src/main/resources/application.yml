@@ -1,0 +1,16 @@
+dataObjects:
+    by:
+        page: 5
+spring:
+    datasource:
+        driver-class-name: com.mysql.jdbc.Driver
+        password: 123
+        url: jdbc:mysql://localhost:3306/rdsdb
+        username: root
+    jpa:
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.MySQL5Dialect
+        show-sql: true

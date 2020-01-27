@@ -23,3 +23,11 @@ async function submitData(){
             alert(result.message);
         }
 }
+
+async function findData(){
+  let dataTypeSelect = document.getElementById("dataTypeSelectOutput");
+  let dataTypeName = dataTypeSelect.options[dataTypeSelect.selectedIndex].text;
+  let date = document.getElementById("dateOutput").value;
+  if(dataTypeSelect.options[dataTypeSelect.selectedIndex].value == "null") dataTypeName = null;
+  alert(dataTypeName + " " + date);
+}

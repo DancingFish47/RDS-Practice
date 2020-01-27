@@ -3,7 +3,7 @@ package com.rychkov.rds.dtos;
 import lombok.Builder;
 import lombok.Data;
 
-import java.sql.Date;
+import java.util.Date;
 
 @Data
 @Builder

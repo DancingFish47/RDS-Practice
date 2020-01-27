@@ -1,9 +1,10 @@
 package com.rychkov.rds.entities;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -27,6 +28,8 @@ public class DataObject extends AbstractEntity {
     @Column(name = "maxlifecyclelevel")
     private Integer maxLifeCycleLevel;
 
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "validtill")
     private Date validTill;
 

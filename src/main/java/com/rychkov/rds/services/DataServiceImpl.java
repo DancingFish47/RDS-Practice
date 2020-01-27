@@ -9,13 +9,15 @@ import com.rychkov.rds.repositories.DataObjectsRepository;
 import com.rychkov.rds.repositories.DataTypesRepository;
 import com.rychkov.rds.repositories.LifeCyclesRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -27,6 +29,8 @@ public class DataServiceImpl implements DataService {
     private final DataTypesRepository dataTypesRepository;
     private final DataObjectsRepository dataObjectsRepository;
     private final LifeCyclesRepository lifeCyclesRepository;
+    @Autowired
+    private Environment environment;
 
     @Override
     public List<DataType> getAllDataTypes() {
@@ -65,16 +69,28 @@ public class DataServiceImpl implements DataService {
     }
 
     @Override
-    public List<DataObject> getAllDataObjectsByDataTypeName(String dataTypeName) throws DataObjectException {
-        Optional<DataType> optionalDataType = dataTypesRepository.findByName(dataTypeName);
-        if (optionalDataType.isEmpty()) throw new DataObjectException("Wrong data type!");
-        return dataObjectsRepository.findAllByDataType_Id(optionalDataType.get().getId());
-    }
+    public Page<DataObject> getPageDataObjects(@Nullable String dataTypeName, @Nullable Date date, Integer page) {
+        if (dataTypeName != null) {
+            if (date != null) {
+                return dataObjectsRepository.findAllByDataType_NameAndValidTill(
+                        dataTypeName,
+                        date,
+                        PageRequest.of(page - 1, Integer.parseInt(Objects.requireNonNull(environment.getProperty("dataObjects.by.page")))));
+            } else {
+                return dataObjectsRepository.findAllByDataType_Name(
+                        dataTypeName,
+                        PageRequest.of(page - 1, Integer.parseInt(Objects.requireNonNull(environment.getProperty("dataObjects.by.page")))));
+            }
+        } else {
+            if (date != null) {
+                return dataObjectsRepository.findAllByValidTill(
+                        date,
+                        PageRequest.of(page - 1, Integer.parseInt(Objects.requireNonNull(environment.getProperty("dataObjects.by.page")))));
+            } else {
+                return dataObjectsRepository.findAll(
+                        PageRequest.of(page - 1, Integer.parseInt(Objects.requireNonNull(environment.getProperty("dataObjects.by.page")))));
+            }
+        }
 
-    @Override
-    public Page<DataObject> getPageDataObjectsByDataTypeName(String dataTypeName, Integer page) {
-        Optional<DataType> optionalDataType = dataTypesRepository.findByName(dataTypeName);
-        if (optionalDataType.isEmpty()) throw new DataObjectException("Wrong data type!");
-        return dataObjectsRepository.findAllByDataType_Name(dataTypeName, PageRequest.of(page-1, 2));
     }
 }

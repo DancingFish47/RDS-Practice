@@ -6,7 +6,10 @@ import com.rychkov.rds.entities.DataType;
 import com.rychkov.rds.entities.LifeCycle;
 import com.rychkov.rds.exceptions.DataObjectException;
 import org.springframework.data.domain.Page;
+import org.springframework.lang.Nullable;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 public interface DataService {
@@ -18,7 +21,6 @@ public interface DataService {
 
     DataObject saveNewDataObject(DataObjectDto dataObjectDto) throws DataObjectException;
 
-    List<DataObject> getAllDataObjectsByDataTypeName(String dataTypeName);
+    Page<DataObject> getPageDataObjects(@Nullable String dataTypeName, @Nullable Date date, Integer page);
 
-    Page<DataObject> getPageDataObjectsByDataTypeName(String dataTypeName, Integer page);
 }

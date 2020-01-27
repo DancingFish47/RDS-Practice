@@ -49,20 +49,4 @@ class DataServiceImplTest {
         assertEquals("Test", dataObjectsRepository.findById(dataObject.getId()).get().getDataContent());
     }
 
-    @Test
-    void getAllDataObjectsByDataType() {
-        Optional<DataType> optionalDataType = dataTypesRepository.findByName("Web");
-        assertTrue(optionalDataType.isPresent());
-        dataService.saveNewDataObject(DataObjectDto.builder().dataContent("Test").dataType(optionalDataType.get().getId()).lifeCycle(1).build());
-        assertNotNull(dataService.getAllDataObjectsByDataTypeName(optionalDataType.get().getName()));
-    }
-
-    @Test
-    void getPageDataObjectsByDataTypeName() {
-        Optional<DataType> optionalDataType = dataTypesRepository.findByName("Web");
-        assertTrue(optionalDataType.isPresent());
-        dataService.saveNewDataObject(DataObjectDto.builder().dataContent("Test").dataType(optionalDataType.get().getId()).lifeCycle(1).build());
-        Page<DataObject> dataObjectPage = dataService.getPageDataObjectsByDataTypeName(optionalDataType.get().getName(), 1);
-        assertTrue(dataObjectPage.getTotalPages() > 0);
-    }
 }
