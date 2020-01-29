@@ -11,6 +11,7 @@ import org.springframework.lang.Nullable;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface DataService {
     List<DataType> getAllDataTypes();
@@ -21,6 +22,8 @@ public interface DataService {
 
     DataObject saveNewDataObject(DataObjectDto dataObjectDto) throws DataObjectException;
 
-    Page<DataObject> getPageDataObjects(@Nullable String dataTypeName, @Nullable Date date, Integer page);
+    Optional<DataObject> getTopDataObjectsByDataTypeName(@Nullable String dataTypeName, Date date);
+
+    List<DataObject> getTopDataForEachDataType(Date date);
 
 }

@@ -21,24 +21,9 @@
          <label for="dateOutput">Date</label>
         <input id="dateOutput" type="date">
         <button type="button" onclick="findData()">Find</button>
+        <button type="button" onclick="reset()">Reset</button>
         <br>
          <div th:if="${!#lists.isEmpty(dataObjects)}" id="dataObjectsDiv" style="display: block;">
-           <ul class="pagination justify-content-center">
-                <li class="page-item disabled" th:if="${prevPage == null}">
-                    <a aria-disabled="true" class="page-link" tabindex="-1">Previous</a>
-                </li>
-                <li class="page-item" th:if="${prevPage != null}">
-                    <a aria-disabled="true" class="page-link" tabindex="-1"
-                       th:href="${'?page=' + prevPage}">Previous</a>
-                </li>
-                <li class="page-item"><a class="page-link" th:default="1" th:text="${page}"></a></li>
-                <li class="page-item disabled" th:if="${nextPage == null}">
-                    <a aria-disabled="true" class="page-link" tabindex="-1">Next</a>
-                </li>
-                <li class="page-item" th:if="${nextPage != null}">
-                    <a aria-disabled="true" class="page-link" tabindex="-1" th:href="${'?page=' + nextPage}">Next</a>
-                </li>
-            </ul>
            <table id="dataObjectsTable">
                <thead>
                <tr>

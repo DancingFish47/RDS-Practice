@@ -17,10 +17,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional
@@ -69,28 +66,22 @@ public class DataServiceImpl implements DataService {
     }
 
     @Override
-    public Page<DataObject> getPageDataObjects(@Nullable String dataTypeName, @Nullable Date date, Integer page) {
-        if (dataTypeName != null) {
-            if (date != null) {
-                return dataObjectsRepository.findAllByDataType_NameAndValidTillGreaterThanOrderByValidTillAsc(
-                        dataTypeName,
-                        date,
-                        PageRequest.of(page - 1, Integer.parseInt(Objects.requireNonNull(environment.getProperty("dataObjects.by.page")))));
-            } else {
-                return dataObjectsRepository.findAllByDataType_Name(
-                        dataTypeName,
-                        PageRequest.of(page - 1, Integer.parseInt(Objects.requireNonNull(environment.getProperty("dataObjects.by.page")))));
-            }
-        } else {
-            if (date != null) {
-                return dataObjectsRepository.findAllByValidTillGreaterThanOrderByValidTillAsc(
-                        date,
-                        PageRequest.of(page - 1, Integer.parseInt(Objects.requireNonNull(environment.getProperty("dataObjects.by.page")))));
-            } else {
-                return dataObjectsRepository.findAll(
-                        PageRequest.of(page - 1, Integer.parseInt(Objects.requireNonNull(environment.getProperty("dataObjects.by.page")))));
-            }
-        }
-
+    public Optional<DataObject> getTopDataObjectsByDataTypeName(@Nullable String dataTypeName, Date date) {
+        return dataObjectsRepository.findTop1ByDataType_NameAndValidTillGreaterThanOrderByValidTillAsc(
+                dataTypeName,
+                date
+        );
     }
+
+    @Override
+    public List<DataObject> getTopDataForEachDataType(Date date) {
+        List<DataObject> dataObjects = new ArrayList<>();
+        for (DataType dataType : dataTypesRepository.findAll()) {
+            Optional<DataObject> optionalDataObject = dataObjectsRepository.findTop1ByDataType_NameAndValidTillGreaterThanOrderByValidTillAsc(dataType.getName(), date);
+            optionalDataObject.ifPresent(dataObjects::add);
+        }
+        return dataObjects;
+    }
+
+
 }

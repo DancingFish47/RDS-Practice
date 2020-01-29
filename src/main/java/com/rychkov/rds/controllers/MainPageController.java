@@ -5,13 +5,18 @@ import com.rychkov.rds.dtos.ResponseDto;
 import com.rychkov.rds.entities.DataObject;
 import com.rychkov.rds.services.DataService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+import static java.sql.Date.valueOf;
 
 @Controller
 @RequiredArgsConstructor
@@ -19,18 +24,27 @@ public class MainPageController {
     private final DataService dataService;
 
     @GetMapping({"/"})
-    public String mainPage(@RequestParam(value = "dataType", required = false) String dataTypeName,
-                           @RequestParam(value = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date,
-                           @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
-                           Model model) {
+    public String homePage() {
+        return "redirect:/getDataObjects";
+    }
 
-        Page<DataObject> dataObjectPage = dataService.getPageDataObjects(dataTypeName, date, page);
+    @GetMapping({"/getDataObjects"})
+    public String getDataObjects(@RequestParam(value = "dataType", required = false) String dataTypeName,
+                                 @RequestParam(value = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date,
+                                 Model model) {
 
-        if (dataObjectPage.hasNext()) model.addAttribute("nextPage", page + 1);
-        if (dataObjectPage.hasPrevious()) model.addAttribute("prevPage", page - 1);
+        if (date == null) {
+            date = valueOf(LocalDate.now());
+        }
+        List<DataObject> dataObjectList = new ArrayList<>();
+        if (dataTypeName != null) {
+            Optional<DataObject> dataObject = dataService.getTopDataObjectsByDataTypeName(dataTypeName, date);
+            dataObject.ifPresent(dataObjectList::add);
+        } else {
+            dataObjectList.addAll(dataService.getTopDataForEachDataType(date));
+        }
 
-        model.addAttribute("page", page);
-        model.addAttribute("dataObjects", dataObjectPage);
+        model.addAttribute("dataObjects", dataObjectList);
         model.addAttribute("dataTypes", dataService.getAllDataTypes());
         model.addAttribute("lifeCycles", dataService.getAllLifeCycles());
         model.addAttribute("lifeCyclesCount", dataService.countLifeCycles());

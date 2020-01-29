@@ -14,14 +14,14 @@ import java.util.Date;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Table(name = "dataobject")
 public class DataObject extends AbstractEntity {
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "datatype")
     private DataType dataType;
 
     @Column(name = "datacontent")
     private String dataContent;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "lifecycle")
     private LifeCycle lifeCycle;
 

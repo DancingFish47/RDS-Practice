@@ -6,6 +6,7 @@ networks:
     driver: bridge
 
 services:
+
   db:
     image: mysql
     environment:
@@ -64,17 +65,6 @@ services:
       - db
     networks:
       - net
-
-  flyway-test:
-    container_name: flyway-test
-    image: flyway/flyway
-    command: -url=jdbc:mysql://test-db -schemas=test-rdsdb -user=root -password=123 -connectRetries=60 migrate
-    volumes:
-      - ./schema-test.sql:/flyway/sql/V1__Initial.sql
-    depends_on:
-      - test-db
-    networks:
-      - test-net
 
 volumes:
   db-data:

@@ -6,17 +6,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface DataObjectsRepository extends PagingAndSortingRepository<DataObject, Integer> {
-    List<DataObject> findAllByDataType_Id(Integer dataTypeId);
-
-    Page<DataObject> findAllByDataType_Name(String dataTypeName, Pageable pageable);
-
-    Page<DataObject> findAllByValidTillGreaterThanOrderByValidTillAsc(Date date, Pageable pageable);
-
-    Page<DataObject> findAllByDataType_NameAndValidTillGreaterThanOrderByValidTillAsc(String dataTypeName, Date date, Pageable pageable);
-
+    Optional<DataObject> findTop1ByDataType_NameAndValidTillGreaterThanOrderByValidTillAsc(String dataTypeName, Date date);
 }
