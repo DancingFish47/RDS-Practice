@@ -32,16 +32,17 @@ public class MainPageController {
     public String getDataObjects(@RequestParam(value = "dataType", required = false) String dataTypeName,
                                  @RequestParam(value = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date,
                                  Model model) {
+        List<DataObject> dataObjectList = new ArrayList<>();
 
         if (date == null) {
             date = valueOf(LocalDate.now());
         }
-        List<DataObject> dataObjectList = new ArrayList<>();
+
         if (dataTypeName != null) {
-            Optional<DataObject> dataObject = dataService.getTopDataObjectsByDataTypeName(dataTypeName, date);
+            Optional<DataObject> dataObject = dataService.getTopDataObjectByDataTypeName(dataTypeName, date);
             dataObject.ifPresent(dataObjectList::add);
         } else {
-            dataObjectList.addAll(dataService.getTopDataForEachDataType(date));
+            dataObjectList.addAll(dataService.getTopDataObjectForEachDataType(date));
         }
 
         model.addAttribute("dataObjects", dataObjectList);

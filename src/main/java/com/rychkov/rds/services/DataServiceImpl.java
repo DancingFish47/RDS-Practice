@@ -11,13 +11,14 @@ import com.rychkov.rds.repositories.LifeCyclesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -66,7 +67,7 @@ public class DataServiceImpl implements DataService {
     }
 
     @Override
-    public Optional<DataObject> getTopDataObjectsByDataTypeName(@Nullable String dataTypeName, Date date) {
+    public Optional<DataObject> getTopDataObjectByDataTypeName(@Nullable String dataTypeName, Date date) {
         return dataObjectsRepository.findTop1ByDataType_NameAndValidTillGreaterThanOrderByValidTillAsc(
                 dataTypeName,
                 date
@@ -74,7 +75,7 @@ public class DataServiceImpl implements DataService {
     }
 
     @Override
-    public List<DataObject> getTopDataForEachDataType(Date date) {
+    public List<DataObject> getTopDataObjectForEachDataType(Date date) {
         List<DataObject> dataObjects = new ArrayList<>();
         for (DataType dataType : dataTypesRepository.findAll()) {
             Optional<DataObject> optionalDataObject = dataObjectsRepository.findTop1ByDataType_NameAndValidTillGreaterThanOrderByValidTillAsc(dataType.getName(), date);

@@ -7,8 +7,6 @@ import com.rychkov.rds.entities.LifeCycle;
 import com.rychkov.rds.repositories.DataObjectsRepository;
 import com.rychkov.rds.repositories.DataTypesRepository;
 import com.rychkov.rds.repositories.LifeCyclesRepository;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -86,7 +84,7 @@ class DataServiceImplTest {
 
     @Test
     void getTopDataObjectsByDataTypeName() {
-        Optional<DataObject> optionalDataObject = dataService.getTopDataObjectsByDataTypeName(
+        Optional<DataObject> optionalDataObject = dataService.getTopDataObjectByDataTypeName(
                 webDataType.getName(),
                 Date.valueOf(LocalDate.now()));
 
