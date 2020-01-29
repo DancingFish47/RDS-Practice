@@ -68,10 +68,7 @@ public class DataServiceImpl implements DataService {
 
     @Override
     public Optional<DataObject> getTopDataObjectByDataTypeName(@Nullable String dataTypeName, Date date) {
-        return dataObjectsRepository.findTop1ByDataType_NameAndValidTillGreaterThanOrderByValidTillAsc(
-                dataTypeName,
-                date
-        );
+        return dataObjectsRepository.findTop1ByDataType_NameAndValidTillGreaterThanOrderByValidTillAsc(dataTypeName, date);
     }
 
     @Override
@@ -83,6 +80,4 @@ public class DataServiceImpl implements DataService {
         }
         return dataObjects;
     }
-
-
 }

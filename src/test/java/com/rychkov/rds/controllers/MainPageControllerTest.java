@@ -65,7 +65,7 @@ class MainPageControllerTest {
         lifeCycle = LifeCycle.builder().level(1).name("First").build();
         lifeCycle = lifeCyclesRepository.save(lifeCycle);
 
-        pastDate = Date.valueOf("2020-01-01");
+        pastDate = Date.valueOf(LocalDate.now().minusMonths(1));
         closestDate = Date.valueOf(LocalDate.now().plusDays(1));
         futureDate = Date.valueOf(LocalDate.now().plusMonths(1));
 
